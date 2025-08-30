@@ -5,9 +5,62 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+  color: #FFD700;
+  min-height: 100vh;
+}
+
+a {
+  color: #FFD700;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #FFC000;
+  text-decoration: underline;
+}
+
+button {
+  background: linear-gradient(45deg, #FFD700, #FFA500);
+  color: #000000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(45deg, #FFC000, #FF8C00);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 215, 0, 0.2);
+}
+
+input, textarea, select {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid #FFD700;
+  color: #FFD700;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin: 5px 0;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #FFA500;
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+::placeholder {
+  color: rgba(255, 215, 0, 0.6);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+  background-color: rgba(255, 215, 0, 0.1);
+  padding: 2px 5px;
+  border-radius: 3px;
+  color: #FFD700;
 }
