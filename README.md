@@ -47,7 +47,65 @@ A modern, gamified learning platform that makes financial education engaging and
 - Hot reload for both frontend/backend
 - Environment-based configuration
 
-## 🚀 Quick Start
+## 🚀 Cloud Deployment
+
+### Backend (Render)
+1. **Create a Render Account**
+   - Go to [render.com](https://render.com/) and sign up
+   - Click "New" → "Web Service"
+
+2. **Connect GitHub**
+   - Select your repository
+   - Set the root directory to `backend`
+
+3. **Configure Service**
+   - **Name**: `finesse-backend`
+   - **Region**: Choose closest to you (e.g., Singapore)
+   - **Branch**: `main`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+
+4. **Environment Variables**
+   - `DATABASE_URL`: (Will be provided after creating PostgreSQL)
+   - `GEMINI_API_KEY`: Your Google Gemini API key
+   - `SECRET_KEY`: Generate a random string (e.g., `openssl rand -hex 32`)
+   - `GEMINI_MODEL`: `gemini-1.5-flash`
+
+5. **Add PostgreSQL**
+   - In Render Dashboard, click "New" → "PostgreSQL"
+   - Copy the connection string
+   - Go back to your Web Service → Environment → Add `DATABASE_URL`
+   - Run migrations:
+     - In the Render Dashboard, go to your Web Service
+     - Open the "Shell" tab
+     - Run: `python migrate_db.py`
+     - Run: `python seed_lessons.py`
+
+6. **Get Backend URL**
+   - After deployment, find your backend URL (e.g., `https://finesse-backend.onrender.com`)
+   - Your API will be at: `https://finesse-backend.onrender.com/api`
+
+### Frontend (Vercel)
+1. **Deploy to Vercel**
+   - Go to [vercel.com](https://vercel.com/)
+   - Click "Add New" → "Project"
+   - Import your GitHub repository
+   - Set root directory to `frontend`
+
+2. **Configure Project**
+   - **Framework Preset**: Create React App
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `build`
+   - **Install Command**: `npm install`
+
+3. **Environment Variables**
+   - `REACT_APP_API_BASE_URL`: Your Render backend URL (e.g., `https://finesse-backend.onrender.com/api`)
+
+4. **Deploy**
+   - Click "Deploy"
+   - Your app will be live at: `https://your-project.vercel.app`
+
+## 🚀 Local Development
 
 ### Prerequisites
 - Docker and Docker Compose
