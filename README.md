@@ -1,103 +1,105 @@
-# 📈 Finesse - Gamified Financial Education Platform
+# 📈 Finesse : Finance Essentials - Gamified Financial Education Platform 
 
 A modern, gamified learning platform that makes financial education engaging and accessible for beginners.
 
-## 🚀 Current Status
+## 🚀 Features
 
-### ✅ Completed Features
-- **Full-Stack Architecture**: FastAPI backend + React TypeScript frontend
-- **Database Integration**: PostgreSQL with SQLAlchemy ORM
-- **Gamified UI**: Beautiful, modern interface with XP rewards and progress tracking
-- **Lesson System**: 6 beginner-friendly lessons with progressive difficulty
-- **API Integration**: Frontend successfully fetches real data from backend
-- **Responsive Design**: Mobile-friendly interface
+### 🎓 Interactive Lessons
+- **4 Comprehensive Lessons** covering investing fundamentals
+- **Step-by-step learning** with progress tracking
+- **Interactive quizzes** with instant feedback
+- **Progress persistence** with localStorage fallback
 
-### 📚 Current Lessons
-1. **💰 What Are Stocks?** (100 XP) - Absolute basics for beginners
-2. **🏪 How Stock Markets Work** (120 XP) - Understanding market mechanics  
-3. **📱 Your First Stock Purchase** (150 XP) - Practical buying guide
-4. **🛡️ Don't Lose Your Money** (180 XP) - Essential risk management
-5. **📊 Reading Stock Charts** (200 XP) - Basic chart interpretation
-6. **🎯 Building Your Portfolio** (220 XP) - Diversification strategies
+### 🏆 Gamification
+- **XP System** - Earn points for completing lessons
+- **Daily Streaks** - Maintain your learning momentum
+- **Leaderboard** - Compete with other learners
+- **Achievements** - Unlock badges for milestones
 
-## 🎯 Next Development Goals
+### 🤖 AI-Powered Tutor
+- **Ask any investing question** and get concise answers
+- **Gemini AI Integration** for accurate, up-to-date information
+- **Context-aware responses** based on your current lesson
 
-### High Priority
-- [ ] **User Authentication System**
-  - Login/Register pages
-  - JWT token management
-  - Protected routes
-  - User session handling
-
-- [ ] **Interactive Lesson Pages**
-  - Detailed lesson content view
-  - Progress tracking within lessons
-  - Quiz/assessment components
-  - "Continue" button functionality
-
-- [ ] **User Dashboard**
-  - Personal progress overview
-  - Achievement system
-  - Learning streak tracking
-  - XP leaderboard
-
-### Medium Priority
-- [ ] **Lesson Completion System**
-  - Mark lessons as completed
-  - Unlock next lesson progression
-  - XP reward distribution
-  - Progress persistence
-
-- [ ] **Enhanced UI/UX**
-  - Lesson preview cards
-  - Interactive charts and visualizations
-  - Mobile app version (React Native)
-  - Dark/light theme toggle
-
-### Future Features
-- [ ] **Advanced Content**
-  - Video lessons integration
-  - Real-time market data
-  - Paper trading simulator
-  - Community features
+### 📱 Modern UI/UX
+- **Responsive design** works on all devices
+- **Dark/Light mode** support
+- **Intuitive navigation** and progress tracking
+- **Beautiful animations** and transitions
 
 ## 🛠️ Tech Stack
 
 **Frontend:**
 - React 18 with TypeScript
 - Modern CSS with responsive design
-- Fetch API for backend communication
+- Axios for API communication
+- React Router for navigation
 
 **Backend:**
-- FastAPI (Python)
-- PostgreSQL database
-- SQLAlchemy ORM
-- JWT authentication
+- FastAPI (Python 3.9+)
+- PostgreSQL with SQLAlchemy ORM
+- JWT Authentication
+- Google Gemini AI Integration
 - CORS enabled
 
 **Development:**
-- Docker Compose for database
+- Docker Compose for containerization
 - Hot reload for both frontend/backend
-- Structured project organization
+- Environment-based configuration
 
 ## 🚀 Quick Start
 
-### Backend Setup
+### Prerequisites
+- Docker and Docker Compose
+- Node.js 16+ and npm
+- Python 3.9+
+
+### Running with Docker (Recommended)
 ```bash
-cd backend
-C:\Users\luckf\AppData\Local\Programs\Python\Python312\python.exe -m uvicorn app.main:app --reload --port 8000
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
 ```
 
-### Frontend Setup
+### Manual Setup
+
+#### Backend
+```bash
+cd backend
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set environment variables
+# Create a .env file with:
+# DATABASE_URL=postgresql+psycopg2://postgres:postgres@localhost:5432/finesse
+# GEMINI_API_KEY=your_gemini_api_key
+
+# Run migrations
+python migrate_db.py
+
+# Start server
+docker-compose up -d backend #preferred
+#then run this
+docker-compose up -d --build  
+#uvicorn app.main:app --reload --port 8000 #not preferred
+
+```
+
+#### Frontend
 ```bash
 cd frontend
-npm start
-```
 
-### Database Setup
-```bash
-cd backend
-C:\Users\luckf\AppData\Local\Programs\Python\Python312\python.exe clear_and_reseed.py
+# Install dependencies
+npm install
+
+# Start development server
+npm start
 ```
 
 ## 📱 Access Points
@@ -105,42 +107,47 @@ C:\Users\luckf\AppData\Local\Programs\Python\Python312\python.exe clear_and_rese
 - **Backend API**: http://localhost:8000
 - **API Docs**: http://localhost:8000/docs
 
-## 🎮 User Experience Flow
+## 📚 Lessons Included
+1. **Introduction to Investing** - The basics of investing
+2. **Stocks: Building Blocks of Wealth** - Understanding stocks
+3. **Fundamental Analysis** - Evaluating companies
+4. **Risk Management** - Protecting your investments
 
-### Current Flow
-1. User opens app → sees lesson dashboard
-2. Views available lessons with XP rewards
-3. Sees progress indicators and streak counter
+## 🔒 Authentication
+- Secure JWT-based authentication
+- User registration and login
+- Password hashing with bcrypt
+- Protected routes
 
-### Planned Flow
-1. User registers/logs in
-2. Takes assessment to determine skill level
-3. Follows personalized learning path
-4. Completes lessons → earns XP → unlocks achievements
-5. Tracks progress on personal dashboard
-6. Competes with friends on leaderboard
+## 🌟 Features in Detail
 
-## 🏗️ Architecture Decisions
+### AI Tutor
+- Powered by Google's Gemini AI
+- Context-aware responses
+- Rate-limited API calls
+- Error handling and fallbacks
 
-- **Progressive Lesson Structure**: Each lesson builds on previous knowledge
-- **Gamification Elements**: XP, streaks, and achievements to maintain engagement
-- **Beginner-First Approach**: Complex concepts broken into digestible pieces
-- **Real-World Focus**: Practical advice over theoretical knowledge
-- **Mobile-Responsive**: Designed for learning on any device
+### Leaderboard
+- Top 6 users displayed
+- XP and streak tracking
+- Visual ranking system
+- Real-time updates
 
-## 🎯 Success Metrics
+### Daily Challenges
+- Earn bonus XP
+- Track your streak
+- Compete with friends
 
-- User engagement (lesson completion rates)
-- Learning progression (XP earned over time)
-- Retention (daily/weekly active users)
-- Knowledge retention (quiz scores improvement)
+## 🤝 Contributing
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## 📄 License
+This project is a functional MVP.
 
 ---
 
 **Built for SEBI Hackathon** - Making financial literacy accessible and engaging for everyone.
-
-
-WE SHOULD ALSO MAKE A FORGOT PASSWORD SECTION
-
-
-" C:\Users\luckf\AppData\Local\Programs\Python\Python312\python.exe -m uvicorn app.main:app --reload --port 8000"
