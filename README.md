@@ -138,3 +138,9 @@ C:\Users\luckf\AppData\Local\Programs\Python\Python312\python.exe clear_and_rese
 ---
 
 **Built for SEBI Hackathon** - Making financial literacy accessible and engaging for everyone.
+
+
+WE SHOULD ALSO MAKE A FORGOT PASSWORD SECTION
+
+
+" C:\Users\luckf\AppData\Local\Programs\Python\Python312\python.exe -m uvicorn app.main:app --reload --port 8000"

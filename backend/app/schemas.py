@@ -19,21 +19,59 @@ class User(UserBase):
     class Config:
         from_attributes = True
 
+from typing import Union
+
+class ContentBase(BaseModel):
+    content_type: str  # 'text', 'quiz', 'video', 'interactive'
+    title: str
+    content: Union[dict, str]  # Can be either JSON-serializable content or string
+    order_index: int = 0
+
+class ContentCreate(ContentBase):
+    pass
+
+class ContentResponse(ContentBase):
+    id: int
+    lesson_id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class QuizQuestionBase(BaseModel):
+    question: str
+    options: list[str]
+    correct_answer: int
+    explanation: str
+    order_index: int = 0
+
+class QuizQuestionCreate(QuizQuestionBase):
+    pass
+
+class QuizQuestionResponse(QuizQuestionBase):
+    id: int
+    lesson_content_id: int
+
+    class Config:
+        from_attributes = True
+
 class LessonBase(BaseModel):
     title: str
     description: str
-    content: str
-    xp_reward: int
-    category: str
+    icon: str = "📚"
+    xp_reward: int = 100
+    estimated_duration: int = 15  # in minutes
+    order_index: int = 0
+    is_active: bool = True
 
 class LessonCreate(LessonBase):
-    order_index: int = 0
+    content_items: list[ContentCreate] = []
 
 class LessonResponse(LessonBase):
     id: int
-    order_index: int
-    is_active: bool
+    content_items: list[ContentResponse] = []
     created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True

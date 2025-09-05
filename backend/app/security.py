@@ -1,86 +1,67 @@
 from datetime import datetime, timedelta
-from typing import Optional
-import json
-import base64
-from Crypto.Signature import pkcs1_15
-from Crypto.Hash import SHA256
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import AES
-from Crypto.Random import get_random_bytes
-import hmac
+from typing import Optional, Dict, Any
 import hashlib
-from passlib.context import CryptContext
+import os
+from jose import JWTError, jwt
+from fastapi import HTTPException, status
 from .config import settings
 
-# Password Hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Password Hashing using SHA-256 with salt
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    # Extract the salt and hash from the stored password
+    try:
+        salt = hashed_password[:32]  # First 32 chars are the salt
+        stored_hash = hashed_password[32:]  # Rest is the hash
+        
+        # Hash the provided password with the same salt
+        hasher = hashlib.sha256()
+        hasher.update(salt.encode('utf-8') + plain_password.encode('utf-8'))
+        computed_hash = hasher.hexdigest()
+        
+        return computed_hash == stored_hash
+    except Exception:
+        return False
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+def get_password_hash(password: str) -> str:
+    # Generate a random salt
+    salt = os.urandom(16).hex()
+    
+    # Hash the password with the salt
+    hasher = hashlib.sha256()
+    hasher.update(salt.encode('utf-8') + password.encode('utf-8'))
+    hashed_password = hasher.hexdigest()
+    
+    # Return salt + hash
+    return salt + hashed_password
 
-def get_password_hash(password):
-    return pwd_context.hash(password)
-
-# JWT Token Creation using pycryptodome
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+    """Create a JWT access token"""
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
         expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode.update({"exp": int(expire.timestamp())})
+    to_encode.update({"exp": expire})
     
-    # Create JWT header
-    header = {
-        "alg": settings.ALGORITHM,
-        "typ": "JWT"
-    }
+    # Generate a secure random key if not exists
+    if not hasattr(settings, 'SECRET_KEY') or not settings.SECRET_KEY:
+        settings.SECRET_KEY = os.urandom(32).hex()
     
-    # Encode header and payload
-    header_encoded = base64.urlsafe_b64encode(json.dumps(header).encode()).decode().rstrip('=')
-    payload_encoded = base64.urlsafe_b64encode(json.dumps(to_encode).encode()).decode().rstrip('=')
-    
-    # Create signature using HMAC-SHA256
-    message = f"{header_encoded}.{payload_encoded}"
-    signature = hmac.new(
-        settings.SECRET_KEY.encode(),
-        message.encode(),
-        hashlib.sha256
-    ).digest()
-    signature_encoded = base64.urlsafe_b64encode(signature).decode().rstrip('=')
-    
-    return f"{message}.{signature_encoded}"
+    # Create JWT token
+    return jwt.encode(to_encode, settings.SECRET_KEY, algorithm="HS256")
 
-def verify_token(token: str):
-    """Verify and decode JWT token"""
+def verify_token(token: str) -> Optional[dict]:
+    """Verify and decode JWT token using PyJWT"""
     try:
-        # Split token into parts
-        header_encoded, payload_encoded, signature_encoded = token.split('.')
-        
-        # Verify signature
-        message = f"{header_encoded}.{payload_encoded}"
-        expected_signature = hmac.new(
-            settings.SECRET_KEY.encode(),
-            message.encode(),
-            hashlib.sha256
-        ).digest()
-        
-        # Add padding if needed
-        signature_encoded += '=' * (4 - len(signature_encoded) % 4)
-        provided_signature = base64.urlsafe_b64decode(signature_encoded)
-        
-        if not hmac.compare_digest(expected_signature, provided_signature):
+        if not hasattr(settings, 'SECRET_KEY') or not settings.SECRET_KEY:
             return None
             
-        # Decode payload
-        payload_encoded += '=' * (4 - len(payload_encoded) % 4)
-        payload = json.loads(base64.urlsafe_b64decode(payload_encoded).decode())
-        
-        # Check expiration
-        if payload.get('exp', 0) < datetime.utcnow().timestamp():
-            return None
-            
+        payload = jwt.decode(
+            token,
+            settings.SECRET_KEY,
+            algorithms=["HS256"],
+            options={"verify_exp": True}
+        )
         return payload
-        
-    except Exception:
+    except JWTError:
         return None

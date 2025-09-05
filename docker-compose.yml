@@ -1,13 +1,13 @@
 version: '3.8'
+
 services:
-  db:
-    image: postgres:13
-    restart: always
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=db
-    ports:
-      - "5432:5432"
+  backend:
+    build: ./backend
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DATABASE_URL=sqlite:////app/finesse.db
+    restart: unless-stopped

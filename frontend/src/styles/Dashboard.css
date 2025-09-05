@@ -1,0 +1,774 @@
+/* Finesse App - Sunset Theme */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--terminal-accent); }
+}
+
+@keyframes sunsetShine {
+  0% {
+    background-position: 0% 0%;
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 200% 0%;
+    opacity: 0.8;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.5; }
+}
+
+:root {
+  /* Dark Old Money Theme */
+  --bg-primary: #0A0A0A;
+  --bg-secondary: #121212;
+  --bg-surface: #1A1A1A;
+  --text-primary: #E8E1D5;
+  --text-secondary: #8B8378;
+  --primary: #5D4B36;
+  --primary-light: #7A6248;
+  --secondary: #3E2D1E;
+  --accent: #8B6B3D;
+  --border: #2A241D;
+  --success: #4A6B3D;
+  --warning: #8B6B3D;
+  --error: #6B3D3D;
+  
+  --rich-bg: var(--bg-primary);
+  --rich-text: var(--text-primary);
+  --rich-accent: var(--accent);
+  --rich-accent-light: var(--primary-light);
+  --rich-border: var(--border);
+  --rich-card: var(--bg-surface);
+  --rich-shadow: rgba(0, 0, 0, 0.4);
+  --rich-muted: var(--text-secondary);
+  --rich-highlight: rgba(139, 107, 61, 0.1);
+  
+  --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --border-radius: 8px;
+  --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700&display=swap');
+
+body {
+  font-family: var(--font-body);
+  line-height: 1.7;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+  background-attachment: fixed;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  letter-spacing: 0.2px;
+  font-size: 16px;
+  font-weight: 400;
+  color-scheme: dark;
+}
+
+.finesse-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative Elements */
+.finesse-app::before,
+.finesse-app::after {
+  content: '';
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 173, 173, 0.1) 0%, rgba(0,0,0,0) 70%);
+  z-index: -1;
+  animation: pulse 8s infinite alternate;
+}
+
+.finesse-app::before {
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  animation-delay: 2s;
+}
+
+.finesse-app::after {
+  bottom: -150px;
+  left: -150px;
+  width: 700px;
+  height: 700px;
+  animation-delay: 4s;
+}
+
+/* Header */
+.app-header {
+  background: linear-gradient(135deg, #0F0F0F 0%, #1A1A1A 100%);
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 25px;
+  position: relative;
+}
+
+.app-title {
+  background: linear-gradient(135deg, #8B6B3D, #B8A98F, #8B6B3D);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-family: var(--font-heading);
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin: 0 0 0 25px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(139, 107, 61, 0.3);
+  transition: all 0.3s ease;
+}
+
+.app-title:hover {
+  text-shadow: 0 0 15px rgba(139, 107, 61, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Navigation */
+.navbar {
+  display: flex;
+  gap: 1.5rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+}
+
+.nav-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform, color, background-color, border-color;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+  z-index: 1;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(255, 82, 82, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: -1;
+  border-radius: 4px;
+}
+
+.nav-link:hover {
+  color: var(--accent);
+  background: rgba(139, 107, 61, 0.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(139, 107, 61, 0.2);
+  transform: translateZ(0) scale(1.02);
+}
+
+.nav-link.active {
+  color: var(--text-primary);
+  background-color: rgba(0, 191, 255, 0.2);
+  border: 1px solid var(--rich-accent);
+  font-weight: bold;
+}
+
+/* User Stats */
+.user-stats {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  background: rgba(30, 30, 30, 0.7);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat i {
+  color: var(--accent);
+  font-size: 1.1rem;
+  filter: drop-shadow(0 0 4px rgba(139, 107, 61, 0.3));
+}
+
+.stat:hover {
+  background: white;
+  border-color: var(--rich-accent-light);
+  box-shadow: 0 8px 25px rgba(139, 90, 43, 0.15);
+  transform: translateY(-3px);
+  color: #333;
+}
+
+.stat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--rich-accent);
+  transition: all 0.3s ease;
+}
+
+.stat-icon {
+  font-size: 1.2rem;
+  color: var(--rich-accent);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 1px;
+}
+
+/* Main Content */
+.main-content {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 3rem 2rem;
+  width: 100%;
+  flex: 1;
+  background-color: var(--rich-card);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px var(--rich-shadow);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--rich-border);
+  transition: var(--transition);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 1.5rem 0;
+  position: relative;
+  letter-spacing: -0.25px;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary-light);
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+/* Welcome section */
+.welcome-section {
+  display: none;
+}
+
+/* Lessons Grid */
+.lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.lesson-card {
+  background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-secondary) 100%);
+  background-clip: padding-box;
+  border: 1px solid var(--border);
+  padding: 2rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  min-height: 430px;
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-body);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 4px;
+}
+
+/* Leaderboard: make top 3 cards shorter without affecting other pages */
+.lesson-card.top3 {
+  min-height: 300px;
+}
+.lesson-card.top3 .lesson-header {
+  min-height: 4rem;
+}
+.lesson-card.top3 .lesson-description {
+  max-height: 3.8rem;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+@media (max-width: 576px) {
+  .lesson-card.top3 { min-height: 240px; padding: 1rem; }
+}
+
+.lesson-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  border-color: var(--accent);
+  background: linear-gradient(145deg, #1E1E1E, #252525);
+}
+
+.lesson-card:hover h3 {
+  color: var(--accent);
+}
+
+.lesson-header {
+  margin-bottom: 0.5rem;
+  min-height: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.lesson-header h3 {
+  background: linear-gradient(135deg, #8B6B3D, #B8A98F, #8B6B3D);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.4;
+  min-height: 3.5rem; /* Fixed height for title area */
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.xp-badge {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: block;
+  margin: 0 0 1rem 0;
+  opacity: 0.9;
+  min-height: 1.2rem;
+  text-align: left;
+  width: 100%;
+}
+
+.lesson-description {
+  color: var(--text-secondary);
+  margin: 0 0 1.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  flex-grow: 1;
+  padding-left: 1.2rem;
+  border-left: 1px solid var(--rich-border);
+  margin-left: 3px;
+  max-height: 5.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  transition: all 0.3s ease;
+}
+
+/* Adjust description height for cards with two-line titles */
+.lesson-header h3:has(br) + .xp-badge + .lesson-description {
+  max-height: 4.5rem;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  margin-top: -0.5rem;
+}
+
+/* Progress Section */
+.progress-section {
+  margin-top: auto;
+  padding-top: 1rem;
+  position: relative;
+}
+
+.progress-bar {
+  height: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--terminal-border);
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--terminal-accent);
+  transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+  position: relative;
+  box-shadow: 0 0 5px var(--terminal-accent);
+}
+
+.progress-text {
+  font-size: 0.9rem;
+  color: #FFD700; /* Gold color */
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+  display: block;
+  text-align: right;
+  font-weight: 600;
+  padding: 0.4rem 0 0.6rem 0;
+  margin: 0;
+  transition: all 0.3s ease;
+}
+
+/* Add gold color to progress bar fill */
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+  transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+  position: relative;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+/* Buttons */
+.btn {
+  width: 100%;
+  padding: 0.9rem 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  border: 1px solid var(--primary);
+  outline: none;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-family: var(--font-heading);
+  background: transparent;
+  color: var(--primary);
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  backdrop-filter: blur(5px);
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: var(--text-primary);
+  border: 1px solid var(--accent);
+  letter-spacing: 1.5px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  text-transform: uppercase;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(58, 86, 180, 0.4);
+  color: white;
+}
+
+.btn.secondary {
+  background: transparent;
+  border: 1px solid var(--terminal-border);
+  color: var(--terminal-text-dim);
+  transition: all 0.3s ease;
+}
+
+.btn.secondary:hover {
+  border-color: var(--terminal-accent);
+  color: var(--terminal-text);
+  box-shadow: 0 0 10px var(--terminal-accent);
+  background: rgba(0, 191, 255, 0.1);
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 3rem 0;
+  flex-wrap: wrap;
+}
+
+.quick-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.action-icon {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  margin-top: auto;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: white;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-top: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .header-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+  
+  .navbar {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .user-stats {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .quick-actions {
+    flex-direction: column;
+  }
+  
+  .quick-action-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .main-content {
+    padding: 1rem;
+  }
+  
+  .welcome-section h2 {
+    font-size: 1.8rem;
+  }
+  
+  .lesson-card {
+    padding: 1.2rem;
+  }
+  
+  .stat {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Leaderboard specific styles */
+.leaderboard-card .leader-name {
+  font-weight: 700;
+}
+
+/* Remove default gold gradient on headings inside leaderboard cards */
+.leaderboard-card .lesson-header h3 {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: inherit !important;
+  color: var(--text-primary);
+}
+
+/* Rank-based gradients for top 3 */
+.rank-1 .leader-name {
+  background: linear-gradient(135deg, #8B6B3D, #B8A98F, #8B6B3D); /* gold (same as headings) */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.rank-1 .leader-rank {
+  background: linear-gradient(135deg, #8B6B3D, #B8A98F, #8B6B3D);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.rank-2 .leader-name {
+  background: linear-gradient(135deg, #B0B0B0, #E0E0E0, #B0B0B0); /* silver */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.rank-2 .leader-rank {
+  background: linear-gradient(135deg, #B0B0B0, #E0E0E0, #B0B0B0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.rank-3 .leader-name {
+  background: linear-gradient(135deg, #CD7F32, #DFA46A, #CD7F32); /* bronze */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.rank-3 .leader-rank {
+  background: linear-gradient(135deg, #CD7F32, #DFA46A, #CD7F32);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Ranks 4-6: bold text using XP badge color */
+.rank-4 .leader-name,
+.rank-5 .leader-name,
+.rank-6 .leader-name,
+.rank-4 .leader-rank,
+.rank-5 .leader-rank,
+.rank-6 .leader-rank {
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+/* Enlarge badges on leaderboard and make them fill available width */
+.leaderboard-card .leaderboard-stats {
+  display: flex;
+  flex-direction: column; /* stack badges line by line */
+  gap: 0.75rem;
+}
+.leaderboard-card .leaderboard-stats .stat {
+  width: 100%;
+  justify-content: center;
+  padding: 1rem 1.25rem; /* larger rectangles */
+  font-size: 1rem;
+}
+.leaderboard-card .leaderboard-stats .stat .stat-icon svg {
+  width: 20px;
+  height: 20px;
+}

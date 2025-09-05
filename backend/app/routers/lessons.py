@@ -11,7 +11,8 @@ router = APIRouter()
 def get_lessons(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     """Get all available lessons"""
     lessons = crud.get_lessons(db, skip=skip, limit=limit)
-    return lessons
+    # Explicitly convert to Pydantic models to avoid any lazy-load issues during serialization
+    return [schemas.LessonResponse.model_validate(l, from_attributes=True) for l in lessons]
 
 @router.get("/lessons/{lesson_id}", response_model=schemas.LessonResponse)
 def get_lesson(lesson_id: int, db: Session = Depends(get_db)):

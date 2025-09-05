@@ -166,7 +166,6 @@ body {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  text-fill-color: transparent;
   font-family: var(--font-heading);
   font-size: 1.9rem;
   font-weight: 700;
@@ -682,7 +681,6 @@ body, html {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  text-fill-color: transparent;
   margin: 0 0 1rem 0;
   font-size: 1.4rem;
   font-weight: 600;
@@ -1061,7 +1059,7 @@ body, html {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-fill-color: transparent;
+  color: transparent;
   font-weight: 500;
 }
 

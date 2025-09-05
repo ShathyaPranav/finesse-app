@@ -1,6 +1,8 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import and_
 from datetime import datetime
+import json
+from typing import Dict, Any, List, Optional
 from . import models, schemas, security
 
 
@@ -24,24 +26,107 @@ def create_user(db: Session, username: str, email: str, password: str):
     db.refresh(db_user)
     return db_user
 
+# Additional user helpers
+def get_user_by_email(db: Session, email: str):
+    return db.query(models.User).filter(models.User.email == email).first()
+
+def get_leaderboard(db: Session, limit: int = 10):
+    """Return top users ordered by xp_points descending."""
+    return (db.query(models.User)
+            .order_by(models.User.xp_points.desc())
+            .limit(limit)
+            .all())
+
+def set_user_xp(db: Session, user_id: int, xp_points: int):
+    """Set a user's total XP points to the given value and return the user."""
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        return None
+    user.xp_points = xp_points
+    db.commit()
+    db.refresh(user)
+    return user
+
+def set_user_streak(db: Session, user_id: int, streak_days: int):
+    """Set a user's current streak days and return the user."""
+    user = db.query(models.User).filter(models.User.id == user_id).first()
+    if not user:
+        return None
+    user.streak_days = streak_days
+    db.commit()
+    db.refresh(user)
+    return user
+
+# Content CRUD operations
+def create_lesson_content(db: Session, content, lesson_id: int):
+    db_content = models.LessonContent(
+        lesson_id=lesson_id,
+        content_type=content.content_type,
+        title=content.title,
+        content=content.content,
+        order_index=content.order_index
+    )
+    db.add(db_content)
+    db.commit()
+    db.refresh(db_content)
+    return db_content
+
+def create_quiz_question(db: Session, question, lesson_content_id: int):
+    db_question = models.QuizQuestion(
+        lesson_content_id=lesson_content_id,
+        question=question.question,
+        options=question.options,
+        correct_answer=question.correct_answer,
+        explanation=question.explanation,
+        order_index=question.order_index
+    )
+    db.add(db_question)
+    db.commit()
+    db.refresh(db_question)
+    return db_question
+
 # Lesson CRUD operations
 def get_lessons(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Lesson).filter(models.Lesson.is_active == True).order_by(models.Lesson.order_index).offset(skip).limit(limit).all()
+    # Eager-load related content to avoid lazy-load access during response serialization
+    return (db.query(models.Lesson)
+            .options(joinedload(models.Lesson.content_items))
+            .filter(models.Lesson.is_active == True)
+            .order_by(models.Lesson.order_index)
+            .offset(skip).limit(limit)
+            .all())
 
 def get_lesson(db: Session, lesson_id: int):
-    return db.query(models.Lesson).filter(models.Lesson.id == lesson_id).first()
+    return (db.query(models.Lesson)
+            .options(
+                joinedload(models.Lesson.content_items)
+                .joinedload(models.LessonContent.quiz_questions)
+            )
+            .filter(models.Lesson.id == lesson_id)
+            .first())
 
 def create_lesson(db: Session, lesson):
     db_lesson = models.Lesson(
         title=lesson.title,
         description=lesson.description,
-        content=lesson.content,
+        icon=lesson.icon,
         xp_reward=lesson.xp_reward,
-        category=lesson.category,
-        order_index=lesson.order_index
+        estimated_duration=lesson.estimated_duration,
+        order_index=lesson.order_index,
+        is_active=lesson.is_active
     )
     db.add(db_lesson)
     db.commit()
+    db.refresh(db_lesson)
+    
+    # Add content items
+    for content_item in lesson.content_items:
+        db_content = create_lesson_content(db, content_item, db_lesson.id)
+        
+        # If it's a quiz, add questions
+        if content_item.content_type == 'quiz' and 'questions' in content_item.content:
+            for question in content_item.content['questions']:
+                create_quiz_question(db, question, db_content.id)
+    
     db.refresh(db_lesson)
     return db_lesson
 
